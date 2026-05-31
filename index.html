@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zine Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --ink: #1a1208;
@@ -15,63 +16,75 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--ink); color: var(--paper); font-family: var(--f); min-height: 100vh; }
   #app { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
   header { margin-bottom: 2rem; border-bottom: 1px solid #3a3020; padding-bottom: 1.25rem; }
   h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
   h1 em { color: var(--accent); font-style: italic; }
   .subtitle { margin-top: 0.4rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
   label { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
   .section-block { margin-top: 1.5rem; }
+
   #clipboard-banner { display: none; margin-bottom: 1rem; padding: 0.8rem 1rem; background: #1a2a10; border-left: 3px solid #4a8a2a; font-size: 0.78rem; line-height: 1.6; color: #8aba6a; }
   #clipboard-banner strong { color: #aada8a; }
-  textarea { width: 100%; min-height: 220px; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper); font-family: var(--f); font-size: 0.88rem; line-height: 1.65; padding: 0.9rem; resize: vertical; outline: none; border-radius: 2px; transition: border-color 0.2s; }
+
+  textarea { width: 100%; min-height: 200px; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper); font-family: var(--f); font-size: 0.88rem; line-height: 1.65; padding: 0.9rem; resize: vertical; outline: none; border-radius: 2px; transition: border-color 0.2s; }
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: #4a4030; }
+
   .counter { margin-top: 0.35rem; font-size: 0.7rem; color: var(--muted); text-align: right; }
   .counter span { color: var(--paper); font-weight: 700; }
   .counter.warn span { color: var(--accent); }
   .counter.nine span { color: #4a8a2a; }
-  .hint-nine { display: none; margin-top: 0.5rem; padding: 0.55rem 0.8rem; background: #1a2a10; border-left: 3px solid #4a8a2a; font-size: 0.72rem; line-height: 1.6; color: #6a9a4a; }
-  .warn-msg { margin-top: 0.75rem; padding: 0.65rem 0.9rem; background: #2a1208; border-left: 3px solid var(--accent); font-size: 0.76rem; line-height: 1.6; display: none; }
+
+  .hint-box { display: none; margin-top: 0.5rem; padding: 0.55rem 0.8rem; font-size: 0.72rem; line-height: 1.6; }
+  .hint-nine { background: #1a2a10; border-left: 3px solid #4a8a2a; color: #6a9a4a; }
+  .warn-msg { background: #2a1208; border-left: 3px solid var(--accent); color: #c07060; }
+
   .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
   select, input[type="text"] { width: 100%; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper); font-family: var(--f); font-size: 0.85rem; padding: 0.6rem 0.75rem; outline: none; border-radius: 2px; appearance: none; }
   select:focus, input:focus { border-color: var(--accent); }
+
+  /* Poster / image section */
+  .poster-section { margin-top: 1.5rem; border: 1px dashed #3a5a20; border-radius: 2px; padding: 1rem; }
+  .poster-section .ps-title { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #6a9a4a; margin-bottom: 0.75rem; }
+  .poster-section p { font-size: 0.74rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.75rem; }
+
+  .img-drop { border: 1px dashed #3a5a20; border-radius: 2px; padding: 1rem; text-align: center; cursor: pointer; font-size: 0.75rem; color: #6a9a4a; background: #0f1a08; transition: background 0.2s; }
+  .img-drop:hover { background: #151f10; }
+  .img-drop input { display: none; }
+
+  #img-preview { margin-top: 0.75rem; display: none; }
+  #img-preview img { width: 100%; border-radius: 2px; max-height: 120px; object-fit: cover; }
+  .img-clear { margin-top: 0.4rem; font-size: 0.68rem; color: var(--accent); cursor: pointer; text-decoration: underline; }
+
   .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
   button { font-family: var(--f); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: none; border-radius: 2px; padding: 0.75rem 1.2rem; transition: background 0.15s; }
   .btn-primary { background: var(--accent); color: #fff; flex: 1; }
+  .btn-primary:hover { background: #a82e22; }
+  .btn-primary:disabled { background: #6a3020; cursor: wait; }
   .btn-secondary { background: #2a2418; color: var(--paper); border: 1px solid #3a3020; }
   .btn-clipboard { background: #1a3a10; color: #8aba6a; border: 1px solid #3a5a20; }
+
   .info-box { margin-top: 1.5rem; border: 1px dashed #3a3020; padding: 0.9rem 1rem; font-size: 0.76rem; line-height: 1.75; color: var(--muted); }
   .info-box strong { color: var(--paper); }
+
   #preview-hint { margin-top: 1.75rem; display: none; }
   .preview-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
-  /* Preview: landscape sheet containing 4x2 portrait cells */
-  .preview-sheet {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 2px;
-    aspect-ratio: 297 / 210;
-    background: #2a2010;
-    padding: 2px;
-    border-radius: 2px;
-    margin-bottom: 0.75rem;
-  }
+  .preview-sheet { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px; aspect-ratio: 297/210; background: #2a2010; padding: 2px; border-radius: 2px; }
   .preview-cell { background: #0f0c08; border: 1px solid #2a2010; position: relative; overflow: hidden; }
   .preview-cell.filled { border-color: #5a4020; background: #141008; }
   .preview-cell.rot { transform: rotate(180deg); }
   .preview-cell .pg-num { position: absolute; bottom: 2px; right: 3px; font-size: 0.5rem; color: var(--muted); }
   .preview-cell .pg-text { font-size: 0.38rem; color: #5a5040; padding: 2px 3px; line-height: 1.35; }
   .preview-cell.filled .pg-text { color: #907050; }
-  .preview-poster { margin-top: 0.5rem; border: 1px solid #3a5a20; background: #0f1a08; padding: 0.6rem 0.8rem; border-radius: 2px; }
-  .preview-poster .poster-label { font-size: 0.65rem; color: #6a9a4a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
-  .preview-poster .poster-text { font-size: 0.72rem; color: #8aba6a; line-height: 1.5; }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
     <h1>Zine <em>Generator</em></h1>
-    <p class="subtitle">8-seitig · A4 Querformat · 4×2 Hochformat-Felder</p>
+    <p class="subtitle">8-seitig · A4 Querformat · PDF Export</p>
   </header>
 
   <div class="section-block">
@@ -81,14 +94,10 @@
 ---
 Abschnitt 2 → Seite 2
 ---
-...
----
-Abschnitt 8 → Seite 8
----
-Abschnitt 9 → Poster Rückseite (optional)"></textarea>
+...bis 8 Abschnitte"></textarea>
     <div class="counter" id="counter">Abschnitte: <span>0</span> / 8</div>
-    <div class="hint-nine" id="hint-nine">✦ 9. Abschnitt erkannt → Vollseiten-Poster auf der Rückseite.</div>
-    <div class="warn-msg" id="warn-msg"></div>
+    <div class="hint-box hint-nine" id="hint-nine">✦ 9. Abschnitt erkannt → Text-Poster auf der Rückseite.</div>
+    <div class="hint-box warn-msg" id="warn-msg"></div>
   </div>
 
   <div class="options-row">
@@ -106,34 +115,49 @@ Abschnitt 9 → Poster Rückseite (optional)"></textarea>
     </div>
   </div>
 
+  <!-- Poster / Rückseite -->
+  <div class="poster-section">
+    <div class="ps-title">✦ Rückseite (optional)</div>
+    <p>Bild wählen für ein Foto-Poster (JPEG, PNG, HEIC) – wird zentriert auf die Rückseite gedruckt. Oder: 9. Abschnitt in Ulysses für ein Text-Poster.</p>
+    <div class="img-drop" onclick="document.getElementById('img-input').click()">
+      📷 Bild wählen – JPEG, PNG oder HEIC
+      <input type="file" id="img-input" accept="image/jpeg,image/png,image/heic,image/heif" onchange="handleImage(event)">
+    </div>
+    <div id="img-preview">
+      <img id="img-thumb" src="" alt="Vorschau">
+      <div class="img-clear" onclick="clearImage()">✕ Bild entfernen</div>
+    </div>
+  </div>
+
   <div class="btn-row">
-    <button class="btn-primary" onclick="generateZine()">▶ Zine erstellen</button>
+    <button class="btn-primary" id="btn-generate" onclick="generateZine()">▶ PDF erstellen</button>
     <button class="btn-clipboard" onclick="pasteFromClipboard()">📋 Zwischenablage</button>
     <button class="btn-secondary" onclick="loadSample()">Beispiel</button>
   </div>
 
   <div id="preview-hint">
-    <p class="preview-label">Vorderseite – A4 Querformat mit 8 Hochformat-Feldern</p>
+    <p class="preview-label">Vorderseite – Vorschau</p>
     <div class="preview-sheet" id="preview-front"></div>
-    <div class="preview-poster" id="preview-poster" style="display:none">
-      <div class="poster-label">✦ Rückseite – Poster</div>
-      <div class="poster-text" id="poster-text"></div>
-    </div>
   </div>
 
   <div class="info-box">
-    <strong>8 Abschnitte:</strong> Vorderseite mit 8 Zine-Feldern, Rückseite leer.<br>
-    <strong>9 Abschnitte:</strong> + Vollseiten-Poster auf der Rückseite.<br><br>
-    <strong>Drucken:</strong> Safari → Teilen → Drucken → A4 <strong>Querformat</strong>, Ränder „Keine".<br>
+    <strong>PDF direkt drucken:</strong> Kein Formatproblem mehr – das PDF hat exakt A4 Querformat.<br>
+    Safari: Teilen → Drucken. Oder: Teilen → In Dateien sichern.<br><br>
+    <strong>Rückseite:</strong> Bild wählen <em>oder</em> 9. Abschnitt in Ulysses.<br>
+    Bild hat Vorrang wenn beides vorhanden.<br><br>
     <strong>Falten:</strong> Längs → quer → Mittelschlitz aufschneiden → auseinanderziehen.
   </div>
 </div>
 
 <script>
-const mdInput = document.getElementById('md-input');
+const { jsPDF } = window.jspdf;
+
+const mdInput  = document.getElementById('md-input');
 const counter  = document.getElementById('counter');
 const warnMsg  = document.getElementById('warn-msg');
 const hintNine = document.getElementById('hint-nine');
+
+let posterImageData = null; // base64 data URL
 
 mdInput.addEventListener('input', updateCounter);
 
@@ -160,21 +184,35 @@ function getSections() {
   return mdInput.value.split(/\n\s*---\s*\n/).map(s => s.trim()).filter(s => s.length > 0);
 }
 
-function mdToHtml(text) {
-  let h = text
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,   '<h1>$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,     '<em>$1</em>')
-    .replace(/__(.+?)__/g,     '<strong>$1</strong>')
-    .replace(/_(.+?)_/g,       '<em>$1</em>');
-  return h.split('\n').map(line => {
-    const t = line.trim();
-    if (!t) return '';
-    if (t.startsWith('<h')) return t;
-    return `<p>${t}</p>`;
-  }).join('');
+function mdToLines(text, maxChars) {
+  // Strip markdown, return plain lines for jsPDF
+  return text
+    .replace(/^#+\s+/gm, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/_(.+?)_/g, '$1')
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l.length > 0);
+}
+
+function handleImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    posterImageData = e.target.result;
+    document.getElementById('img-thumb').src = posterImageData;
+    document.getElementById('img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  posterImageData = null;
+  document.getElementById('img-input').value = '';
+  document.getElementById('img-preview').style.display = 'none';
 }
 
 async function tryReadClipboard() {
@@ -183,9 +221,7 @@ async function tryReadClipboard() {
     if (text && text.includes('---')) {
       mdInput.value = text;
       updateCounter();
-      const banner = document.getElementById('clipboard-banner');
-      banner.style.display = 'block';
-      banner.innerHTML = '<strong>✓ Text aus Ulysses geladen</strong> – bereit zum Drucken.';
+      showBanner('✓ Text aus Ulysses geladen – bereit zum Drucken.');
     }
   } catch(e) {}
 }
@@ -193,151 +229,212 @@ async function tryReadClipboard() {
 async function pasteFromClipboard() {
   try {
     const text = await navigator.clipboard.readText();
-    if (text) {
-      mdInput.value = text;
-      updateCounter();
-      const banner = document.getElementById('clipboard-banner');
-      banner.style.display = 'block';
-      banner.innerHTML = '<strong>✓ Text eingefügt</strong> – bereit zum Drucken.';
-    }
+    if (text) { mdInput.value = text; updateCounter(); showBanner('✓ Text eingefügt.'); }
   } catch(e) { alert('Bitte erlaube den Zugriff auf die Zwischenablage.'); }
+}
+
+function showBanner(msg) {
+  const b = document.getElementById('clipboard-banner');
+  b.style.display = 'block';
+  b.innerHTML = `<strong>${msg}</strong>`;
 }
 
 window.addEventListener('load', tryReadClipboard);
 
 // ── IMPOSITION ──────────────────────────────────────────────────────────────
-// A4 landscape: 297mm × 210mm
-// 8 cells: each portrait A7 = 74.25mm wide × 105mm tall
-// 4 columns × 2 rows
-// Row 1 (top):    [8↻] [1] [2] [7↻]
-// Row 2 (bottom): [5↻] [4] [3] [6↻]
+// A4 landscape: 297 × 210 mm
+// 8 portrait A7 cells: 74.25mm wide × 105mm tall
+// Row 1: [8↻][1][2][7↻]   Row 2: [5↻][4][3][6↻]
 const FRONT = [
   { page:8, rot:true  }, { page:1, rot:false }, { page:2, rot:false }, { page:7, rot:true  },
   { page:5, rot:true  }, { page:4, rot:false }, { page:3, rot:false }, { page:6, rot:true  },
 ];
 
-const F = `Optima,"Optima Nova",Cantarell,"Gill Sans",sans-serif`;
+const CW = 74.25; // cell width mm
+const CH = 105;   // cell height mm
+const PW = 297;   // page width mm  (A4 landscape)
+const PH = 210;   // page height mm
 
-// Cell width: 297/4 = 74.25mm, Cell height: 210/2 = 105mm
-function cellHtml(slot, pages, title, fontSize) {
-  const pg      = pages[slot.page - 1];
-  const isCover = slot.page === 1;
+async function generateZine() {
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = true;
+  btn.textContent = '… PDF wird erstellt';
 
-  let content = '';
-  if (isCover) {
-    const sub = pg.raw.replace(/^#+\s*/gm,'').replace(/<[^>]+>/g,'').slice(0,50);
-    content = `
-      <div style="font-size:13pt;font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:2mm;">${title}</div>
-      <div style="font-size:5pt;letter-spacing:0.15em;text-transform:uppercase;color:#888;">${sub}</div>`;
-  } else {
-    content = `<div style="font-size:${fontSize}pt;line-height:1.5;">${pg.html}</div>`;
+  try {
+    let sections = getSections().slice(0, 9);
+    const title    = document.getElementById('zine-title').value.trim() || 'Zine';
+    const fontSize = parseFloat(document.getElementById('font-size').value);
+
+    const hasPosterText  = sections.length === 9;
+    const posterText     = hasPosterText ? sections[8] : null;
+    const zineSections   = sections.slice(0, 8);
+    while (zineSections.length < 8) zineSections.push('');
+
+    const pages = zineSections.map((s,i) => ({ num:i+1, raw:s }));
+    const hasPoster = posterImageData || hasPosterText;
+
+    // Create PDF A4 landscape
+    const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+
+    // ── Draw front side ──────────────────────────────────────────────────
+    FRONT.forEach((slot, idx) => {
+      const col = idx % 4;
+      const row = Math.floor(idx / 4);
+      const x   = col * CW;
+      const y   = row * CH;
+      const pg  = pages[slot.page - 1];
+
+      doc.saveGraphicsState();
+
+      if (slot.rot) {
+        // Rotate 180° around cell center
+        const cx = x + CW/2;
+        const cy = y + CH/2;
+        doc.setCurrentTransformationMatrix(
+          doc.Matrix(-1, 0, 0, -1,
+            2 * cx * doc.internal.scaleFactor,
+            2 * (PH - cy) * doc.internal.scaleFactor
+          )
+        );
+      }
+
+      // Cell border (dashed)
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineDashPattern([1, 1], 0);
+      doc.setLineWidth(0.2);
+      doc.rect(x, y, CW, CH);
+      doc.setLineDashPattern([], 0);
+
+      // Content
+      const px = x + 5;
+      const py = y + 5;
+      const pw = CW - 10;
+      const ph = CH - 10;
+
+      if (slot.page === 1) {
+        // Cover
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.setTextColor(26, 18, 8);
+        const titleLines = doc.splitTextToSize(title, pw);
+        const titleH = titleLines.length * 6;
+        doc.text(titleLines, px, y + CH - 12 - titleH);
+
+        if (pg.raw) {
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(5);
+          doc.setTextColor(120, 120, 120);
+          const sub = pg.raw.replace(/^#+\s*/gm,'').split('\n')[0].slice(0,60).toUpperCase();
+          doc.text(sub, px, y + CH - 8);
+        }
+      } else {
+        // Regular page
+        doc.setTextColor(26, 18, 8);
+        let curY = py;
+
+        const lines = mdToLines(pg.raw);
+        for (const line of lines) {
+          if (curY > y + ph) break;
+          if (!line) { curY += fontSize * 0.4; continue; }
+
+          // Detect heading (was ## or #)
+          const wasHeading = pg.raw.split('\n').some(l => l.replace(/^#+\s+/, '') === line && l.startsWith('#'));
+          if (wasHeading) {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(fontSize + 1);
+          } else {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(fontSize);
+          }
+
+          const wrapped = doc.splitTextToSize(line, pw);
+          for (const wl of wrapped) {
+            if (curY > y + ph) break;
+            doc.text(wl, px, curY);
+            curY += (fontSize + 1) * 0.35;
+          }
+          curY += fontSize * 0.15;
+        }
+      }
+
+      // Page number
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(4);
+      doc.setTextColor(180, 180, 180);
+      if (slot.rot) {
+        doc.text(String(slot.page), x + 3, y + 4);
+      } else {
+        doc.text(String(slot.page), x + CW - 5, y + CH - 3);
+      }
+
+      doc.restoreGraphicsState();
+    });
+
+    // ── Draw back side (poster) ──────────────────────────────────────────
+    if (hasPoster) {
+      doc.addPage('a4', 'landscape');
+
+      if (posterImageData) {
+        // Draw image centered and proportionally scaled (cover fit)
+        const fmt = posterImageData.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+        const imgProps = doc.getImageProperties(posterImageData);
+        const imgW = imgProps.width;
+        const imgH = imgProps.height;
+        const scale = Math.max(PW / imgW, PH / imgH);
+        const drawW = imgW * scale;
+        const drawH = imgH * scale;
+        const drawX = (PW - drawW) / 2;
+        const drawY = (PH - drawH) / 2;
+        doc.addImage(posterImageData, fmt, drawX, drawY, drawW, drawH, '', 'FAST');
+
+        // Optional text overlay from 9th section
+        if (hasPosterText && posterText) {
+          doc.setFillColor(0, 0, 0);
+          doc.setGlobalAlpha(0.45);
+          doc.rect(0, PH - 40, PW, 40, 'F');
+          doc.setGlobalAlpha(1);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(14);
+          doc.setTextColor(255, 255, 255);
+          const overlayLines = doc.splitTextToSize(
+            posterText.replace(/^#+\s*/gm,'').split('\n')[0], PW - 40
+          );
+          doc.text(overlayLines, 20, PH - 25);
+        }
+      } else if (hasPosterText) {
+        // Text-only poster
+        doc.setTextColor(26, 18, 8);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(28);
+        const titleLines = doc.splitTextToSize(title, PW - 40);
+        doc.text(titleLines, 20, 40);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(12);
+        let curY = 40 + titleLines.length * 12 + 10;
+        const pLines = mdToLines(posterText);
+        for (const line of pLines) {
+          if (curY > PH - 15) break;
+          const wrapped = doc.splitTextToSize(line, PW - 40);
+          doc.text(wrapped, 20, curY);
+          curY += wrapped.length * 5.5 + 2;
+        }
+      }
+    }
+
+    // ── Save / open PDF ──────────────────────────────────────────────────
+    const filename = title.replace(/\s+/g,'-') + '-zine.pdf';
+    doc.save(filename);
+
+    showPreview(pages, title);
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '▶ PDF erstellen';
   }
-
-  const numPos  = slot.rot ? 'top:2mm;left:2mm;' : 'bottom:2mm;right:2mm;';
-  const rotStyle = slot.rot ? 'transform:rotate(180deg);transform-origin:center center;' : '';
-
-  return `
-<td style="
-  width:74.25mm;
-  height:105mm;
-  overflow:hidden;
-  position:relative;
-  border:0.3pt dashed #ccc;
-  vertical-align:top;
-  ${rotStyle}
-">
-  <div style="padding:4mm 5mm;height:100%;font-family:${F};color:#1a1208;display:flex;flex-direction:column;justify-content:${isCover?'flex-end':'flex-start'};">
-    ${content}
-  </div>
-  <span style="position:absolute;${numPos}font-family:${F};font-size:4pt;color:#bbb;">${slot.page}</span>
-</td>`;
 }
 
-function generateZine() {
-  let sections = getSections().slice(0, 9);
-  const title    = document.getElementById('zine-title').value.trim() || 'Zine';
-  const fontSize = document.getElementById('font-size').value;
-
-  const hasPoster    = sections.length === 9;
-  const posterSection = hasPoster ? sections[8] : null;
-  const zineSections  = sections.slice(0, 8);
-  while (zineSections.length < 8) zineSections.push('');
-
-  const pages = zineSections.map((s,i) => ({ num:i+1, html:mdToHtml(s), raw:s }));
-
-  // Use HTML TABLE for reliable cross-browser print layout
-  // Table: 1 table, 2 rows, 4 cells each = 8 portrait A7 cells on A4 landscape
-  const row1 = FRONT.slice(0,4).map(s => cellHtml(s, pages, title, fontSize)).join('');
-  const row2 = FRONT.slice(4,8).map(s => cellHtml(s, pages, title, fontSize)).join('');
-
-  const frontTable = `
-<table style="
-  width:297mm;
-  height:210mm;
-  border-collapse:collapse;
-  table-layout:fixed;
-  background:white;
-  ${hasPoster ? 'page-break-after:always;' : ''}
-">
-  <tbody>
-    <tr>${row1}</tr>
-    <tr>${row2}</tr>
-  </tbody>
-</table>`;
-
-  const backPage = hasPoster ? `
-<div style="
-  width:297mm;
-  height:210mm;
-  background:white;
-  padding:18mm 22mm;
-  font-family:${F};
-  color:#1a1208;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-">
-  <div style="font-size:26pt;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:8mm;">${title}</div>
-  <div style="font-size:10pt;line-height:1.65;">${mdToHtml(posterSection)}</div>
-</div>` : '';
-
-  const printDoc = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${title} – Zine</title>
-<style>
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { background:white; }
-  h1 { font-family:${F}; font-size:10pt; font-weight:700; margin-bottom:1.5mm; line-height:1.2; }
-  h2 { font-family:${F}; font-size:9pt;  font-weight:700; margin-bottom:1.5mm; line-height:1.2; }
-  h3 { font-family:${F}; font-size:8pt;  font-weight:700; margin-bottom:1mm;   line-height:1.2; }
-  p  { margin-bottom:1.2mm; }
-  em { font-style:italic; }
-  strong { font-weight:700; }
-  @page { size:297mm 210mm; margin:0; }
-</style>
-</head>
-<body>
-${frontTable}
-${backPage}
-</body>
-</html>`;
-
-  const blob = new Blob([printDoc], { type:'text/html;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const win  = window.open(url, '_blank');
-  if (!win) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = title.replace(/\s+/g,'-') + '-zine.html';
-    a.click();
-  }
-
-  showPreview(pages, title, posterSection);
-}
-
-function showPreview(pages, title, posterSection) {
+function showPreview(pages, title) {
   document.getElementById('preview-hint').style.display = 'block';
   const container = document.getElementById('preview-front');
   container.innerHTML = '';
@@ -349,15 +446,6 @@ function showPreview(pages, title, posterSection) {
     div.innerHTML = `<div class="pg-text">${slot.page===1 ? title : text}</div><span class="pg-num">${slot.page}</span>`;
     container.appendChild(div);
   });
-
-  const posterDiv = document.getElementById('preview-poster');
-  if (posterSection) {
-    posterDiv.style.display = 'block';
-    document.getElementById('poster-text').textContent =
-      posterSection.replace(/^#+\s*/gm,'').slice(0,120) + '…';
-  } else {
-    posterDiv.style.display = 'none';
-  }
 }
 
 function loadSample() {
