@@ -18,64 +18,39 @@
   #app { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 
   header { margin-bottom: 2rem; border-bottom: 1px solid #3a3020; padding-bottom: 1.25rem; }
-
   h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
   h1 em { color: var(--accent); font-style: italic; }
-
   .subtitle { margin-top: 0.4rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
   label { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
-
   .section-block { margin-top: 1.5rem; }
 
-  /* Clipboard Banner */
-  #clipboard-banner {
-    display: none;
-    margin-bottom: 1rem;
-    padding: 0.8rem 1rem;
-    background: #1a2a10;
-    border-left: 3px solid #4a8a2a;
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: #8aba6a;
-  }
+  #clipboard-banner { display: none; margin-bottom: 1rem; padding: 0.8rem 1rem; background: #1a2a10; border-left: 3px solid #4a8a2a; font-size: 0.78rem; line-height: 1.6; color: #8aba6a; }
   #clipboard-banner strong { color: #aada8a; }
 
-  textarea {
-    width: 100%; min-height: 240px; background: #0f0c08; border: 1px solid #3a3020;
-    color: var(--paper); font-family: var(--f); font-size: 0.88rem; line-height: 1.65;
-    padding: 0.9rem; resize: vertical; outline: none; border-radius: 2px; transition: border-color 0.2s;
-  }
+  textarea { width: 100%; min-height: 220px; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper); font-family: var(--f); font-size: 0.88rem; line-height: 1.65; padding: 0.9rem; resize: vertical; outline: none; border-radius: 2px; transition: border-color 0.2s; }
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: #4a4030; }
 
   .counter { margin-top: 0.35rem; font-size: 0.7rem; color: var(--muted); text-align: right; }
   .counter span { color: var(--paper); font-weight: 700; }
   .counter.warn span { color: var(--accent); }
+  .counter.nine span { color: #4a8a2a; }
+
+  .hint-nine { display: none; margin-top: 0.5rem; padding: 0.55rem 0.8rem; background: #1a2a10; border-left: 3px solid #4a8a2a; font-size: 0.72rem; line-height: 1.6; color: #6a9a4a; }
 
   .warn-msg { margin-top: 0.75rem; padding: 0.65rem 0.9rem; background: #2a1208; border-left: 3px solid var(--accent); font-size: 0.76rem; line-height: 1.6; display: none; }
 
   .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
-
-  select, input[type="text"] {
-    width: 100%; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper);
-    font-family: var(--f); font-size: 0.85rem; padding: 0.6rem 0.75rem;
-    outline: none; border-radius: 2px; appearance: none;
-  }
+  select, input[type="text"] { width: 100%; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper); font-family: var(--f); font-size: 0.85rem; padding: 0.6rem 0.75rem; outline: none; border-radius: 2px; appearance: none; }
   select:focus, input:focus { border-color: var(--accent); }
 
   .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
-
-  button {
-    font-family: var(--f); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; border: none; border-radius: 2px; padding: 0.75rem 1.4rem; transition: background 0.15s;
-  }
+  button { font-family: var(--f); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: none; border-radius: 2px; padding: 0.75rem 1.2rem; transition: background 0.15s; }
   .btn-primary { background: var(--accent); color: #fff; flex: 1; }
   .btn-primary:hover { background: #a82e22; }
   .btn-secondary { background: #2a2418; color: var(--paper); border: 1px solid #3a3020; }
-  .btn-secondary:hover { background: #3a3420; }
   .btn-clipboard { background: #1a3a10; color: #8aba6a; border: 1px solid #3a5a20; }
-  .btn-clipboard:hover { background: #2a4a18; }
 
   .info-box { margin-top: 1.5rem; border: 1px dashed #3a3020; padding: 0.9rem 1rem; font-size: 0.76rem; line-height: 1.75; color: var(--muted); }
   .info-box strong { color: var(--paper); }
@@ -90,13 +65,17 @@
   .preview-cell .pg-num { position: absolute; bottom: 2px; right: 3px; font-size: 0.5rem; color: var(--muted); }
   .preview-cell .pg-text { font-size: 0.38rem; color: #5a5040; padding: 2px 3px; line-height: 1.35; }
   .preview-cell.filled .pg-text { color: #907050; }
+
+  .preview-poster { margin-top: 0.5rem; border: 1px solid #3a5a20; background: #0f1a08; padding: 0.6rem 0.8rem; border-radius: 2px; }
+  .preview-poster .poster-label { font-size: 0.65rem; color: #6a9a4a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .preview-poster .poster-text { font-size: 0.72rem; color: #8aba6a; line-height: 1.5; }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
     <h1>Zine <em>Generator</em></h1>
-    <p class="subtitle">8-seitig · A4 · 4×2 A7 · Ulysses → Druckfertig</p>
+    <p class="subtitle">8-seitig · A4 · Ulysses → Druckfertig</p>
   </header>
 
   <div class="section-block">
@@ -106,8 +85,13 @@
 ---
 Abschnitt 2 → Seite 2
 ---
-... bis 8 Abschnitte"></textarea>
+...
+---
+Abschnitt 8 → Seite 8
+---
+Abschnitt 9 → Rückseite als Poster (optional)"></textarea>
     <div class="counter" id="counter">Abschnitte: <span>0</span> / 8</div>
+    <div class="hint-nine" id="hint-nine">✦ 9. Abschnitt erkannt → wird als Vollseiten-Poster auf die Rückseite gedruckt.</div>
     <div class="warn-msg" id="warn-msg"></div>
   </div>
 
@@ -128,20 +112,27 @@ Abschnitt 2 → Seite 2
 
   <div class="btn-row">
     <button class="btn-primary" onclick="generateZine()">▶ Zine erstellen</button>
-    <button class="btn-clipboard" onclick="pasteFromClipboard()">📋 Aus Zwischenablage</button>
+    <button class="btn-clipboard" onclick="pasteFromClipboard()">📋 Zwischenablage</button>
     <button class="btn-secondary" onclick="loadSample()">Beispiel</button>
   </div>
 
   <div id="preview-hint">
-    <p class="preview-label">Vorderseite</p>
+    <p class="preview-label">Vorderseite (Druckseite 1)</p>
     <div class="preview-sheet" id="preview-front"></div>
-    <p class="preview-label">Rückseite</p>
-    <div class="preview-sheet" id="preview-back"></div>
+    <div class="preview-poster" id="preview-poster" style="display:none">
+      <div class="poster-label">✦ Rückseite – Poster</div>
+      <div class="poster-text" id="poster-text"></div>
+    </div>
+    <div id="preview-back-label" style="display:none">
+      <p class="preview-label" style="margin-top:0.5rem;color:#3a5020">Rückseite leer</p>
+    </div>
   </div>
 
   <div class="info-box">
-    <strong>Workflow mit Ulysses:</strong> In Ulysses teilen → Kurzbefehl „Zine Generator" → App öffnet sich → Text ist automatisch eingefügt → „Zine erstellen" → Safari: Teilen → Drucken → A4 Querformat, Ränder „Keine", beidseitig.<br><br>
-    <strong>Falten:</strong> Längs (Hotdog) → quer (Hamburger) → Mittelschlitz aufschneiden → auseinanderziehen.
+    <strong>8 Abschnitte:</strong> Vorderseite mit allen 8 Zine-Seiten, Rückseite leer.<br>
+    <strong>9 Abschnitte:</strong> Wie oben + 9. Abschnitt als Vollseiten-Poster auf der Rückseite.<br><br>
+    <strong>Drucken:</strong> Safari → Teilen → Drucken → A4 Querformat, Ränder „Keine".<br>
+    <strong>Falten:</strong> Längs → quer → Mittelschlitz aufschneiden → auseinanderziehen.
   </div>
 </div>
 
@@ -149,15 +140,27 @@ Abschnitt 2 → Seite 2
 const mdInput = document.getElementById('md-input');
 const counter = document.getElementById('counter');
 const warnMsg = document.getElementById('warn-msg');
+const hintNine = document.getElementById('hint-nine');
 
 mdInput.addEventListener('input', updateCounter);
 
 function updateCounter() {
   const n = getSections().length;
   counter.querySelector('span').textContent = n;
-  counter.className = 'counter' + (n > 8 ? ' warn' : '');
-  warnMsg.style.display = n > 8 ? 'block' : 'none';
-  if (n > 8) warnMsg.textContent = `${n} Abschnitte – nur die ersten 8 werden gedruckt.`;
+  if (n > 9) {
+    counter.className = 'counter warn';
+    warnMsg.style.display = 'block';
+    warnMsg.textContent = `${n} Abschnitte – nur die ersten 9 werden verwendet (8 Seiten + 1 Poster).`;
+    hintNine.style.display = 'none';
+  } else if (n === 9) {
+    counter.className = 'counter nine';
+    warnMsg.style.display = 'none';
+    hintNine.style.display = 'block';
+  } else {
+    counter.className = 'counter';
+    warnMsg.style.display = 'none';
+    hintNine.style.display = 'none';
+  }
 }
 
 function getSections() {
@@ -181,7 +184,6 @@ function mdToHtml(text) {
   }).join('');
 }
 
-// Automatisch aus Zwischenablage lesen beim Laden
 async function tryReadClipboard() {
   try {
     const text = await navigator.clipboard.readText();
@@ -192,12 +194,9 @@ async function tryReadClipboard() {
       banner.style.display = 'block';
       banner.innerHTML = '<strong>✓ Text aus Ulysses geladen</strong> – bereit zum Drucken.';
     }
-  } catch(e) {
-    // Clipboard-Zugriff verweigert – kein Problem, manuell einfügen
-  }
+  } catch(e) {}
 }
 
-// Manuell aus Zwischenablage einfügen
 async function pasteFromClipboard() {
   try {
     const text = await navigator.clipboard.readText();
@@ -213,16 +212,12 @@ async function pasteFromClipboard() {
   }
 }
 
-// Beim Laden versuchen
 window.addEventListener('load', tryReadClipboard);
 
+// Imposition – Vorderseite: alle 8 Zine-Seiten auf einem A4-Blatt
 const FRONT = [
   { page:8, rot:true  }, { page:1, rot:false }, { page:2, rot:false }, { page:7, rot:true  },
   { page:5, rot:true  }, { page:4, rot:false }, { page:3, rot:false }, { page:6, rot:true  },
-];
-const BACK = [
-  { page:6, rot:false }, { page:3, rot:true  }, { page:4, rot:true  }, { page:5, rot:false },
-  { page:7, rot:false }, { page:2, rot:true  }, { page:1, rot:true  }, { page:8, rot:false },
 ];
 
 const CW = 74.25, CH = 105;
@@ -247,18 +242,31 @@ function cellHtml(slot, pages, title, fontSize) {
   </div>`;
 }
 
-function sheetHtml(slots, pages, title, fontSize) {
-  return `<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;page-break-after:always;">
-    ${slots.map(s => cellHtml(s, pages, title, fontSize)).join('')}
+function posterHtml(text, title) {
+  const html = mdToHtml(text);
+  return `<div style="width:297mm;height:210mm;background:white;padding:18mm 20mm;font-family:${f};color:#1a1208;display:flex;flex-direction:column;justify-content:center;">
+    <div style="font-size:28pt;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:8mm;">${title}</div>
+    <div style="font-size:11pt;line-height:1.6;">${html}</div>
   </div>`;
 }
 
 function generateZine() {
-  let sections = getSections().slice(0, 8);
+  let sections = getSections().slice(0, 9);
   const title = document.getElementById('zine-title').value.trim() || 'Zine';
   const fontSize = document.getElementById('font-size').value;
-  while (sections.length < 8) sections.push('');
-  const pages = sections.map((s, i) => ({ num: i+1, html: mdToHtml(s), raw: s }));
+
+  const hasPoster = sections.length === 9;
+  const posterSection = hasPoster ? sections[8] : null;
+  const zineSections = sections.slice(0, 8);
+
+  while (zineSections.length < 8) zineSections.push('');
+  const pages = zineSections.map((s, i) => ({ num: i+1, html: mdToHtml(s), raw: s }));
+
+  const frontSheet = `<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;${hasPoster ? 'page-break-after:always;' : ''}">
+    ${FRONT.map(s => cellHtml(s, pages, title, fontSize)).join('')}
+  </div>`;
+
+  const backSheet = hasPoster ? posterHtml(posterSection, title) : '';
 
   const printDoc = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>${title}</title>
@@ -274,10 +282,8 @@ function generateZine() {
   @page{size:A4 landscape;margin:0;}
 </style>
 </head><body>
-${sheetHtml(FRONT, pages, title, fontSize)}
-<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;">
-  ${BACK.map(s => cellHtml(s, pages, title, fontSize)).join('')}
-</div>
+${frontSheet}
+${backSheet}
 </body></html>`;
 
   const blob = new Blob([printDoc], { type: 'text/html;charset=utf-8' });
@@ -285,29 +291,35 @@ ${sheetHtml(FRONT, pages, title, fontSize)}
   const win = window.open(url, '_blank');
   if (!win) {
     const a = document.createElement('a');
-    a.href = url;
-    a.download = title.replace(/\s+/g,'-') + '-zine.html';
-    a.click();
+    a.href = url; a.download = title.replace(/\s+/g,'-') + '-zine.html'; a.click();
   }
-  showPreview(pages, title);
+  showPreview(pages, title, posterSection);
 }
 
-function showPreview(pages, title) {
+function showPreview(pages, title, posterSection) {
   document.getElementById('preview-hint').style.display = 'block';
-  function render(slots, id) {
-    const container = document.getElementById(id);
-    container.innerHTML = '';
-    slots.forEach(slot => {
-      const pg = pages[slot.page - 1];
-      const text = pg.raw.replace(/^#+\s*/gm,'').slice(0,50);
-      const div = document.createElement('div');
-      div.className = 'preview-cell' + (pg.raw.trim() ? ' filled' : '') + (slot.rot ? ' rot' : '');
-      div.innerHTML = `<div class="pg-text">${slot.page === 1 ? title : text}</div><span class="pg-num">${slot.page}</span>`;
-      container.appendChild(div);
-    });
+
+  const container = document.getElementById('preview-front');
+  container.innerHTML = '';
+  FRONT.forEach(slot => {
+    const pg = pages[slot.page - 1];
+    const text = pg.raw.replace(/^#+\s*/gm,'').slice(0,50);
+    const div = document.createElement('div');
+    div.className = 'preview-cell' + (pg.raw.trim() ? ' filled' : '') + (slot.rot ? ' rot' : '');
+    div.innerHTML = `<div class="pg-text">${slot.page === 1 ? title : text}</div><span class="pg-num">${slot.page}</span>`;
+    container.appendChild(div);
+  });
+
+  const posterDiv = document.getElementById('preview-poster');
+  const backLabel = document.getElementById('preview-back-label');
+  if (posterSection) {
+    posterDiv.style.display = 'block';
+    backLabel.style.display = 'none';
+    document.getElementById('poster-text').textContent = posterSection.replace(/^#+\s*/gm,'').slice(0, 120) + '…';
+  } else {
+    posterDiv.style.display = 'none';
+    backLabel.style.display = 'block';
   }
-  render(FRONT, 'preview-front');
-  render(BACK, 'preview-back');
 }
 
 function loadSample() {
@@ -383,7 +395,19 @@ Das ist seine Stärke.
 ---
 
 *Selbstverlag · ohne Jahr*
-**Einmal falten, einmal schneiden.**`;
+**Einmal falten, einmal schneiden.**
+
+---
+
+# Das stille Ding
+
+*Ein Poster für die Rückseite*
+
+Es gibt Dinge, die man nicht benennt —
+nicht weil man keine Worte hätte,
+sondern weil die Worte wehtun würden.
+
+Diese Seite ist eine davon.`;
   document.getElementById('zine-title').value = 'Das stille Ding';
   updateCounter();
 }
