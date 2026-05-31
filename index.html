@@ -13,200 +13,86 @@
     --f: 'Optima', 'Optima Nova', 'Cantarell', 'Gill Sans', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); color: var(--paper); font-family: var(--f); min-height: 100vh; }
 
-  body {
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--f);
-    min-height: 100vh;
-  }
+  #app { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 
-  #app {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 2rem 1.25rem 4rem;
-  }
+  header { margin-bottom: 2rem; border-bottom: 1px solid #3a3020; padding-bottom: 1.25rem; }
 
-  header {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #3a3020;
-    padding-bottom: 1.25rem;
-  }
-
-  h1 {
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
+  h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
   h1 em { color: var(--accent); font-style: italic; }
 
-  .subtitle {
-    margin-top: 0.4rem;
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
+  .subtitle { margin-top: 0.4rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
-  label {
-    display: block;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.45rem;
-  }
+  label { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
 
   .section-block { margin-top: 1.5rem; }
 
+  /* Clipboard Banner */
+  #clipboard-banner {
+    display: none;
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    background: #1a2a10;
+    border-left: 3px solid #4a8a2a;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: #8aba6a;
+  }
+  #clipboard-banner strong { color: #aada8a; }
+
   textarea {
-    width: 100%;
-    min-height: 240px;
-    background: #0f0c08;
-    border: 1px solid #3a3020;
-    color: var(--paper);
-    font-family: var(--f);
-    font-size: 0.88rem;
-    line-height: 1.65;
-    padding: 0.9rem;
-    resize: vertical;
-    outline: none;
-    border-radius: 2px;
-    transition: border-color 0.2s;
+    width: 100%; min-height: 240px; background: #0f0c08; border: 1px solid #3a3020;
+    color: var(--paper); font-family: var(--f); font-size: 0.88rem; line-height: 1.65;
+    padding: 0.9rem; resize: vertical; outline: none; border-radius: 2px; transition: border-color 0.2s;
   }
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: #4a4030; }
 
-  .counter {
-    margin-top: 0.35rem;
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-align: right;
-  }
+  .counter { margin-top: 0.35rem; font-size: 0.7rem; color: var(--muted); text-align: right; }
   .counter span { color: var(--paper); font-weight: 700; }
   .counter.warn span { color: var(--accent); }
 
-  .warn-msg {
-    margin-top: 0.75rem;
-    padding: 0.65rem 0.9rem;
-    background: #2a1208;
-    border-left: 3px solid var(--accent);
-    font-size: 0.76rem;
-    line-height: 1.6;
-    display: none;
-  }
+  .warn-msg { margin-top: 0.75rem; padding: 0.65rem 0.9rem; background: #2a1208; border-left: 3px solid var(--accent); font-size: 0.76rem; line-height: 1.6; display: none; }
 
-  .options-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 1.25rem;
-  }
+  .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
 
   select, input[type="text"] {
-    width: 100%;
-    background: #0f0c08;
-    border: 1px solid #3a3020;
-    color: var(--paper);
-    font-family: var(--f);
-    font-size: 0.85rem;
-    padding: 0.6rem 0.75rem;
-    outline: none;
-    border-radius: 2px;
-    appearance: none;
+    width: 100%; background: #0f0c08; border: 1px solid #3a3020; color: var(--paper);
+    font-family: var(--f); font-size: 0.85rem; padding: 0.6rem 0.75rem;
+    outline: none; border-radius: 2px; appearance: none;
   }
   select:focus, input:focus { border-color: var(--accent); }
 
-  .btn-row {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-  }
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
 
   button {
-    font-family: var(--f);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: none;
-    border-radius: 2px;
-    padding: 0.75rem 1.4rem;
-    transition: background 0.15s;
+    font-family: var(--f); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; border: none; border-radius: 2px; padding: 0.75rem 1.4rem; transition: background 0.15s;
   }
   .btn-primary { background: var(--accent); color: #fff; flex: 1; }
   .btn-primary:hover { background: #a82e22; }
   .btn-secondary { background: #2a2418; color: var(--paper); border: 1px solid #3a3020; }
   .btn-secondary:hover { background: #3a3420; }
+  .btn-clipboard { background: #1a3a10; color: #8aba6a; border: 1px solid #3a5a20; }
+  .btn-clipboard:hover { background: #2a4a18; }
 
-  .info-box {
-    margin-top: 1.5rem;
-    border: 1px dashed #3a3020;
-    padding: 0.9rem 1rem;
-    font-size: 0.76rem;
-    line-height: 1.75;
-    color: var(--muted);
-  }
+  .info-box { margin-top: 1.5rem; border: 1px dashed #3a3020; padding: 0.9rem 1rem; font-size: 0.76rem; line-height: 1.75; color: var(--muted); }
   .info-box strong { color: var(--paper); }
-  .info-box code {
-    background: #2a2010;
-    padding: 0 3px;
-    border-radius: 2px;
-    font-family: monospace;
-  }
+  .info-box code { background: #2a2010; padding: 0 3px; border-radius: 2px; font-family: monospace; }
 
-  /* Preview – 4 cols × 2 rows, A7 portrait ratio (74×105 → ~0.705) */
   #preview-hint { margin-top: 1.75rem; display: none; }
-
-  .preview-label {
-    font-size: 0.68rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-
-  .preview-sheet {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 2px;
-    margin-bottom: 0.75rem;
-    background: #2a2010;
-    padding: 2px;
-    border-radius: 2px;
-  }
-
-  .preview-cell {
-    aspect-ratio: 0.705;
-    background: #0f0c08;
-    border: 1px solid #2a2010;
-    position: relative;
-    overflow: hidden;
-  }
+  .preview-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .preview-sheet { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px; margin-bottom: 0.75rem; background: #2a2010; padding: 2px; border-radius: 2px; }
+  .preview-cell { aspect-ratio: 0.705; background: #0f0c08; border: 1px solid #2a2010; position: relative; overflow: hidden; }
   .preview-cell.filled { border-color: #5a4020; background: #141008; }
   .preview-cell.rot { transform: rotate(180deg); }
-
-  .preview-cell .pg-num {
-    position: absolute;
-    bottom: 2px;
-    right: 3px;
-    font-size: 0.5rem;
-    color: var(--muted);
-  }
-  .preview-cell .pg-text {
-    font-size: 0.38rem;
-    color: #5a5040;
-    padding: 2px 3px;
-    line-height: 1.35;
-  }
+  .preview-cell .pg-num { position: absolute; bottom: 2px; right: 3px; font-size: 0.5rem; color: var(--muted); }
+  .preview-cell .pg-text { font-size: 0.38rem; color: #5a5040; padding: 2px 3px; line-height: 1.35; }
   .preview-cell.filled .pg-text { color: #907050; }
 </style>
 </head>
 <body>
-
 <div id="app">
   <header>
     <h1>Zine <em>Generator</em></h1>
@@ -214,12 +100,11 @@
   </header>
 
   <div class="section-block">
-    <label>Text aus Ulysses – Abschnitte mit <code>---</code> trennen</label>
+    <div id="clipboard-banner"></div>
+    <label>Text aus Ulysses – Abschnitte mit <code style="background:#2a2010;padding:0 3px;border-radius:2px;font-family:monospace">---</code> trennen</label>
     <textarea id="md-input" placeholder="Abschnitt 1 → Seite 1 (Cover)
 ---
 Abschnitt 2 → Seite 2
----
-Abschnitt 3 → Seite 3
 ---
 ... bis 8 Abschnitte"></textarea>
     <div class="counter" id="counter">Abschnitte: <span>0</span> / 8</div>
@@ -243,7 +128,8 @@ Abschnitt 3 → Seite 3
 
   <div class="btn-row">
     <button class="btn-primary" onclick="generateZine()">▶ Zine erstellen</button>
-    <button class="btn-secondary" onclick="loadSample()">Beispiel laden</button>
+    <button class="btn-clipboard" onclick="pasteFromClipboard()">📋 Aus Zwischenablage</button>
+    <button class="btn-secondary" onclick="loadSample()">Beispiel</button>
   </div>
 
   <div id="preview-hint">
@@ -254,9 +140,8 @@ Abschnitt 3 → Seite 3
   </div>
 
   <div class="info-box">
-    <strong>Workflow:</strong> Text einfügen → Zine erstellen → neue Seite öffnet sich → Safari: <strong>Teilen → Drucken</strong> → A4 Querformat, Ränder auf „Keine", beidseitig drucken.<br><br>
-    <strong>Falten:</strong> Längs falten (Hotdog) → quer falten (Hamburger) → Mittelschlitz aufschneiden → auseinanderziehen.<br><br>
-    Bald: Direktexport aus Ulysses via Shortcuts.
+    <strong>Workflow mit Ulysses:</strong> In Ulysses teilen → Kurzbefehl „Zine Generator" → App öffnet sich → Text ist automatisch eingefügt → „Zine erstellen" → Safari: Teilen → Drucken → A4 Querformat, Ränder „Keine", beidseitig.<br><br>
+    <strong>Falten:</strong> Längs (Hotdog) → quer (Hamburger) → Mittelschlitz aufschneiden → auseinanderziehen.
   </div>
 </div>
 
@@ -276,10 +161,7 @@ function updateCounter() {
 }
 
 function getSections() {
-  return mdInput.value
-    .split(/\n\s*---\s*\n/)
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
+  return mdInput.value.split(/\n\s*---\s*\n/).map(s => s.trim()).filter(s => s.length > 0);
 }
 
 function mdToHtml(text) {
@@ -299,40 +181,50 @@ function mdToHtml(text) {
   }).join('');
 }
 
-// ─── IMPOSITION ───────────────────────────────────────────────────────────────
-// A4 landscape (297×210mm), 4 cols × 2 rows, each cell = A7 (74.25×105mm)
-//
-// Fold sequence: fold in half lengthwise (hotdog), then fold in half widthwise
-// (hamburger), then slit the center of the short folded edge.
-//
-// When unfolded flat, looking at the front of the sheet:
-//
-//   Col:   1          2          3          4
-// Row 1: [  8↻  ]  [  1   ]  [  2   ]  [  7↻  ]
-// Row 2: [  5↻  ]  [  4   ]  [  3   ]  [  6↻  ]   ← row 2 is upside-down
-//                                                      when sheet is flipped
-//
-// Back of sheet (flip along vertical axis):
-//
-//   Col:   1          2          3          4
-// Row 1: [  ?   ]  ...  (mirror of front, but these are the back faces)
-//
-// Standard 8-page zine imposition (verified):
-// Front: top-row L→R: 8↻ 1 2 7↻  |  bottom-row L→R: 5↻ 4 3 6↻
-// Back:  top-row L→R: 6  7 8 5   |  bottom-row L→R: 3  2 1 4
-// (back printed after flipping sheet on long axis)
-//
-// Simplified verified layout used by most zine printers:
+// Automatisch aus Zwischenablage lesen beim Laden
+async function tryReadClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (text && text.includes('---')) {
+      mdInput.value = text;
+      updateCounter();
+      const banner = document.getElementById('clipboard-banner');
+      banner.style.display = 'block';
+      banner.innerHTML = '<strong>✓ Text aus Ulysses geladen</strong> – bereit zum Drucken.';
+    }
+  } catch(e) {
+    // Clipboard-Zugriff verweigert – kein Problem, manuell einfügen
+  }
+}
+
+// Manuell aus Zwischenablage einfügen
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (text) {
+      mdInput.value = text;
+      updateCounter();
+      const banner = document.getElementById('clipboard-banner');
+      banner.style.display = 'block';
+      banner.innerHTML = '<strong>✓ Text eingefügt</strong> – bereit zum Drucken.';
+    }
+  } catch(e) {
+    alert('Bitte erlaube den Zugriff auf die Zwischenablage.');
+  }
+}
+
+// Beim Laden versuchen
+window.addEventListener('load', tryReadClipboard);
+
 const FRONT = [
-  { page:8, rot:true  }, { page:1, rot:false }, { page:2, rot:false }, { page:7, rot:true  }, // row 1
-  { page:5, rot:true  }, { page:4, rot:false }, { page:3, rot:false }, { page:6, rot:true  }, // row 2
+  { page:8, rot:true  }, { page:1, rot:false }, { page:2, rot:false }, { page:7, rot:true  },
+  { page:5, rot:true  }, { page:4, rot:false }, { page:3, rot:false }, { page:6, rot:true  },
 ];
 const BACK = [
-  { page:6, rot:false }, { page:3, rot:true  }, { page:4, rot:true  }, { page:5, rot:false }, // row 1
-  { page:7, rot:false }, { page:2, rot:true  }, { page:1, rot:true  }, { page:8, rot:false }, // row 2
+  { page:6, rot:false }, { page:3, rot:true  }, { page:4, rot:true  }, { page:5, rot:false },
+  { page:7, rot:false }, { page:2, rot:true  }, { page:1, rot:true  }, { page:8, rot:false },
 ];
 
-// A7 dimensions: 74.25mm wide × 105mm tall
 const CW = 74.25, CH = 105;
 const f = `Optima, "Optima Nova", Cantarell, "Gill Sans", sans-serif`;
 
@@ -340,108 +232,68 @@ function cellHtml(slot, pages, title, fontSize) {
   const pg = pages[slot.page - 1];
   const isCover = slot.page === 1;
   const rot = slot.rot ? `transform:rotate(180deg);` : '';
-
   let content = '';
   if (isCover) {
     const sub = pg.raw.replace(/^#+\s*/gm,'').replace(/<[^>]+>/g,'').slice(0,40);
-    content = `
-      <div style="font-size:14pt;font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:3mm;">${title}</div>
+    content = `<div style="font-size:14pt;font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:3mm;">${title}</div>
       <div style="font-size:5.5pt;letter-spacing:0.15em;text-transform:uppercase;color:#888;">${sub}</div>`;
   } else {
     content = `<div style="font-size:${fontSize}pt;line-height:1.5;">${pg.html}</div>`;
   }
-
   const numPos = slot.rot ? 'top:2pt;left:3pt;' : 'bottom:2pt;right:3pt;';
-
-  return `<div style="
-      width:${CW}mm; height:${CH}mm;
-      overflow:hidden; position:relative;
-      border:0.3pt dashed #ccc;
-      background:white;
-      ${rot}
-    ">
-    <div style="
-      padding:5mm 6mm;
-      height:100%;
-      font-family:${f};
-      color:#1a1208;
-      display:flex;
-      flex-direction:column;
-      justify-content:${isCover ? 'flex-end' : 'flex-start'};
-    ">${content}</div>
+  return `<div style="width:${CW}mm;height:${CH}mm;overflow:hidden;position:relative;border:0.3pt dashed #ccc;background:white;${rot}">
+    <div style="padding:5mm 6mm;height:100%;font-family:${f};color:#1a1208;display:flex;flex-direction:column;justify-content:${isCover?'flex-end':'flex-start'};">${content}</div>
     <span style="position:absolute;${numPos}font-family:${f};font-size:4.5pt;color:#ccc;">${slot.page}</span>
   </div>`;
 }
 
 function sheetHtml(slots, pages, title, fontSize) {
-  const cells = slots.map(s => cellHtml(s, pages, title, fontSize)).join('');
-  return `<div style="
-    width:297mm; height:210mm;
-    display:grid;
-    grid-template-columns:repeat(4,${CW}mm);
-    grid-template-rows:repeat(2,${CH}mm);
-    background:white;
-    page-break-after:always;
-  ">${cells}</div>`;
+  return `<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;page-break-after:always;">
+    ${slots.map(s => cellHtml(s, pages, title, fontSize)).join('')}
+  </div>`;
 }
 
 function generateZine() {
   let sections = getSections().slice(0, 8);
-  const title    = document.getElementById('zine-title').value.trim() || 'Zine';
+  const title = document.getElementById('zine-title').value.trim() || 'Zine';
   const fontSize = document.getElementById('font-size').value;
-
   while (sections.length < 8) sections.push('');
-  const pages = sections.map((s, i) => ({
-    num: i + 1,
-    html: mdToHtml(s),
-    raw: s
-  }));
+  const pages = sections.map((s, i) => ({ num: i+1, html: mdToHtml(s), raw: s }));
 
   const printDoc = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${title} – Zine Druck</title>
+<html><head><meta charset="UTF-8"><title>${title}</title>
 <style>
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:white; }
-  h1 { font-family:${f}; font-size:10pt; font-weight:700; margin-bottom:1.5mm; line-height:1.2; }
-  h2 { font-family:${f}; font-size:9pt;  font-weight:700; margin-bottom:1.5mm; line-height:1.2; }
-  h3 { font-family:${f}; font-size:8pt;  font-weight:700; margin-bottom:1mm;   line-height:1.2; }
-  p  { margin-bottom:1.2mm; }
-  em { font-style:italic; }
-  strong { font-weight:700; }
-  @page { size:A4 landscape; margin:0; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:white;}
+  h1{font-family:${f};font-size:10pt;font-weight:700;margin-bottom:1.5mm;line-height:1.2;}
+  h2{font-family:${f};font-size:9pt;font-weight:700;margin-bottom:1.5mm;line-height:1.2;}
+  h3{font-family:${f};font-size:8pt;font-weight:700;margin-bottom:1mm;line-height:1.2;}
+  p{margin-bottom:1.2mm;}
+  em{font-style:italic;}
+  strong{font-weight:700;}
+  @page{size:A4 landscape;margin:0;}
 </style>
-</head>
-<body>
+</head><body>
 ${sheetHtml(FRONT, pages, title, fontSize)}
-<div style="
-  width:297mm; height:210mm;
-  display:grid;
-  grid-template-columns:repeat(4,${CW}mm);
-  grid-template-rows:repeat(2,${CH}mm);
-  background:white;
-">${BACK.map(s => cellHtml(s, pages, title, fontSize)).join('')}</div>
-</body>
-</html>`;
+<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;">
+  ${BACK.map(s => cellHtml(s, pages, title, fontSize)).join('')}
+</div>
+</body></html>`;
 
   const blob = new Blob([printDoc], { type: 'text/html;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const win  = window.open(url, '_blank');
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
   if (!win) {
     const a = document.createElement('a');
     a.href = url;
     a.download = title.replace(/\s+/g,'-') + '-zine.html';
     a.click();
   }
-
   showPreview(pages, title);
 }
 
 function showPreview(pages, title) {
   document.getElementById('preview-hint').style.display = 'block';
-
   function render(slots, id) {
     const container = document.getElementById(id);
     container.innerHTML = '';
@@ -449,41 +301,17 @@ function showPreview(pages, title) {
       const pg = pages[slot.page - 1];
       const text = pg.raw.replace(/^#+\s*/gm,'').slice(0,50);
       const div = document.createElement('div');
-      div.className = 'preview-cell'
-        + (pg.raw.trim() ? ' filled' : '')
-        + (slot.rot ? ' rot' : '');
-      div.innerHTML = `
-        <div class="pg-text">${slot.page === 1 ? title : text}</div>
-        <span class="pg-num">${slot.page}</span>`;
+      div.className = 'preview-cell' + (pg.raw.trim() ? ' filled' : '') + (slot.rot ? ' rot' : '');
+      div.innerHTML = `<div class="pg-text">${slot.page === 1 ? title : text}</div><span class="pg-num">${slot.page}</span>`;
       container.appendChild(div);
     });
   }
-
   render(FRONT, 'preview-front');
-  render(BACK,  'preview-back');
+  render(BACK, 'preview-back');
 }
 
-// ─── URL-Parameter lesen (für Shortcuts-Integration) ──────────────────────
-(function readFromUrl() {
-  try {
-    const hash = decodeURIComponent(window.location.hash.slice(1));
-    if (!hash) return;
-    const params = new URLSearchParams(hash);
-    const text  = params.get('text');
-    const title = params.get('title');
-    if (text) {
-      mdInput.value = text;
-      updateCounter();
-    }
-    if (title) {
-      document.getElementById('zine-title').value = title;
-    }
-  } catch(e) {}
-})();
-
 function loadSample() {
-  mdInput.value =
-`# Das stille Ding
+  mdInput.value = `# Das stille Ding
 
 Es gibt Dinge, die man nicht benennt.
 Nicht weil man keine Worte hätte —
@@ -556,7 +384,6 @@ Das ist seine Stärke.
 
 *Selbstverlag · ohne Jahr*
 **Einmal falten, einmal schneiden.**`;
-
   document.getElementById('zine-title').value = 'Das stille Ding';
   updateCounter();
 }
