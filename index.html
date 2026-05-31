@@ -140,8 +140,9 @@ Abschnitt 2 → Seite 2
   </div>
 
   <div class="info-box">
-    <strong>Workflow:</strong> PDF wird heruntergeladen → Dateien-App → Teilen → Drucken → A4, <strong>Querformat</strong>, Ränder „Keine".<br><br>
+    <strong>Workflow:</strong> In Ulysses als <strong>Markdown</strong> exportieren → Teilen → Zine Generator → PDF wird heruntergeladen → Dateien-App → Teilen → Drucken → A4, <strong>Querformat</strong>, Ränder „Keine".<br><br>
     <strong>Rückseite:</strong> JPEG/PNG hochladen <em>oder</em> 9. Abschnitt in Ulysses. Bild hat Vorrang.<br><br>
+    <strong>Kompatibel mit:</strong> Ulysses, iA Writer, Obsidian, Bear, Drafts – jede App die Markdown teilen kann.<br><br>
     <strong>Falten:</strong> Längs → quer → Mittelschlitz aufschneiden → auseinanderziehen.
   </div>
 </div>
@@ -236,8 +237,8 @@ window.addEventListener('load', tryReadClipboard);
 
 // ── IMPOSITION ──────────────────────────────────────────────────────────────
 const FRONT = [
-  { page:8, rot:true  }, { page:1, rot:false }, { page:2, rot:false }, { page:7, rot:true  },
-  { page:5, rot:true  }, { page:4, rot:false }, { page:3, rot:false }, { page:6, rot:true  },
+  { page:1, rot:true  }, { page:8, rot:true  }, { page:7, rot:true  }, { page:6, rot:true  },
+  { page:2, rot:false }, { page:3, rot:false }, { page:4, rot:false }, { page:5, rot:false },
 ];
 
 // A4 landscape at 150dpi
