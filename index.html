@@ -184,11 +184,14 @@ function getSections() {
 
 function mdToPlain(text) {
   return text
+    .replace(/%%[^%]*%%/g, '')
+    .replace(/%%.*$/gm, '')
     .replace(/^#+\s+/gm, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/__(.+?)__/g, '$1')
-    .replace(/_(.+?)_/g, '$1');
+    .replace(/_(.+?)_/g, '$1')
+    .replace(/^\s*$/gm, '').trim();
 }
 
 function handleImage(event) {
@@ -463,13 +466,13 @@ async function generateZine() {
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url  = URL.createObjectURL(blob);
 
+    showPreview(pages, title);
+
     const a = document.createElement('a');
     a.href = url;
     a.download = title.replace(/\s+/g,'-') + '-zine.pdf';
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
-
-    showPreview(pages, title);
 
   } catch(e) {
     alert('Fehler: ' + e.message);
