@@ -236,7 +236,7 @@ function cellHtml(slot, pages, title, fontSize) {
     content = `<div style="font-size:${fontSize}pt;line-height:1.5;">${pg.html}</div>`;
   }
   const numPos = slot.rot ? 'top:2pt;left:3pt;' : 'bottom:2pt;right:3pt;';
-  return `<div style="width:${CW}mm;height:${CH}mm;overflow:hidden;position:relative;border:0.3pt dashed #ccc;background:white;${rot}">
+  return `<div style="width:25%;height:50%;overflow:hidden;position:relative;border:0.3pt dashed #ccc;background:white;${rot}">
     <div style="padding:5mm 6mm;height:100%;font-family:${f};color:#1a1208;display:flex;flex-direction:column;justify-content:${isCover?'flex-end':'flex-start'};">${content}</div>
     <span style="position:absolute;${numPos}font-family:${f};font-size:4.5pt;color:#ccc;">${slot.page}</span>
   </div>`;
@@ -262,7 +262,7 @@ function generateZine() {
   while (zineSections.length < 8) zineSections.push('');
   const pages = zineSections.map((s, i) => ({ num: i+1, html: mdToHtml(s), raw: s }));
 
-  const frontSheet = `<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,${CW}mm);grid-template-rows:repeat(2,${CH}mm);background:white;${hasPoster ? 'page-break-after:always;' : ''}">
+  const frontSheet = `<div style="width:297mm;height:210mm;display:grid;grid-template-columns:repeat(4,25%);grid-template-rows:repeat(2,50%);background:white;${hasPoster ? 'page-break-after:always;' : ''}">
     ${FRONT.map(s => cellHtml(s, pages, title, fontSize)).join('')}
   </div>`;
 
