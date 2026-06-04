@@ -163,14 +163,19 @@ Text..."></textarea>
 // ── Parser ────────────────────────────────────────────────────────────────────
 
 function parseHeader(raw) {
-  // Extract @: line
   const headerMatch = raw.match(/^@:\s*(.+)$/m);
   const headerLine  = headerMatch ? headerMatch[1] : '';
 
   const globalColor   = (headerLine.match(/\{color:([^}]+)\}/)        || [])[1] || null;
   const headingColor  = (headerLine.match(/\{heading-color:([^}]+)\}/) || [])[1] || null;
 
-  return { globalColor, headingColor };
+  // Title = everything before the first { curly brace, trimmed
+  // Square brackets like [sea][genocide] are kept as-is
+  const curlyIdx = headerLine.indexOf('{');
+  const rawTitle = curlyIdx >= 0 ? headerLine.slice(0, curlyIdx) : headerLine;
+  const title = rawTitle.trim() || null;
+
+  return { globalColor, headingColor, title };
 }
 
 function stripMeta(raw) {
@@ -216,12 +221,14 @@ function toPlainLine(line) {
     .replace(/_(.+?)_/g, '$1');
 }
 
-function getPdfFilename(sections) {
+function getPdfFilename(sections, headerTitle) {
+  if (headerTitle) return headerTitle.replace(/[^a-zA-Z0-9äöüÄÖÜß\s-]/g,'').trim();
   if (!sections.length) return 'zine';
-  const first = sections[0];
-  const hMatch = first.match(/^#+\s+(.+)$/m);
-  if (hMatch) return stripInlineTags(hMatch[1]);
-  return first.split('\n')[0].replace(/[^a-zA-Z0-9äöüÄÖÜß\s-]/g,'').trim() || 'zine';
+  for (const section of sections) {
+    const hMatch = section.match(/^#+\s+(.+)$/m);
+    if (hMatch) return stripInlineTags(hMatch[1]).replace(/[^a-zA-Z0-9äöüÄÖÜß\s-]/g,'').trim();
+  }
+  return 'zine';
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -513,7 +520,7 @@ async function generate() {
     while (zSections.length < 8) zSections.push('');
     const pages = zSections.map((s,i) => ({num:i+1, raw:s}));
 
-    const filename = getPdfFilename(sections).replace(/\s+/g,'-') || 'zine';
+    const filename = getPdfFilename(sections, colors.title).replace(/\s+/g,'-') || 'zine';
 
     // Render front
     const canvas = document.getElementById('render-canvas');
@@ -565,7 +572,7 @@ async function generate() {
     const blob = new Blob([pdfBytes], {type:'application/pdf'});
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href = url; a.download = filename+'-zine.pdf'; a.click();
+    a.href = url; a.download = filename+'.pdf'; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 
   } catch(e) { alert('Fehler: '+e.message); console.error(e); }
